@@ -1,0 +1,9 @@
+#!/bin/sh
+
+scheme="http"
+timeout=3
+retry=1
+[ "443" == "$2" ] && scheme="https"
+[ "" != "$3" ] && timeout=$3
+[ "" != "$4" ] && retry=$4
+curl --retry $retry --connect-timeout $timeout -I $scheme://$1 > /dev/null 2>&1

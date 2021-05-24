@@ -14,7 +14,7 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_Xray
 config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan
 	bool "Include Trojan"
 	default y if i386||x86_64||arm||aarch64
-	
+
 config PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun
 	bool "Include Kcptun"
 	default n
@@ -58,8 +58,8 @@ define Build/Compile
 endef
 
 define Package/luci-app-vssr/conffiles
-	/etc/vssr/
 	/etc/config/vssr
+	/etc/vssr/
 endef
 
 define Package/luci-app-vssr/install

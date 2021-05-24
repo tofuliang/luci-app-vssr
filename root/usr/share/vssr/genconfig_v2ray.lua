@@ -142,13 +142,18 @@ local bt_rules1 = {
     }
 }
 
+local global = ucursor:get_all(name, ucursor:get_first(name, "global"))
+local socks5_proxy = ucursor:get_all(name, ucursor:get_first(name, "socks5_proxy"))
+local http_proxy = ucursor:get_all(name, ucursor:get_first(name, "http_proxy"))
+local dns_proxy = ucursor:get_all(name, ucursor:get_first(name, "dns_proxy"))
+
 function gen_outbound(server_node, tags, local_ports)
     local bound = {}
     if server_node == nil or server_node == 'nil' then
         bound = nil
     else
         local server = ucursor:get_all(name, server_node)
-        local node_type = server.type == "vless" and "vless" or "vmess"
+        local node_type = server.type == 'vless' and 'vless' or 'vmess'
 
         if server.type ~= 'v2ray' and server.type ~= 'vless' then
             bound = {
@@ -184,9 +189,9 @@ function gen_outbound(server_node, tags, local_ports)
                 -- 底层传输配置
                 streamSettings = {
                     network = server.transport,
-                    security = (server.tls == '1') and ((server.xtls == '1') and "xtls" or "tls") or "none",
-                    tlsSettings = (server.tls == '1' and server.xtls ~= '1') and {allowInsecure = (server.insecure ~= "0") and true or false,serverName=server.tls_host,} or nil,
-                    xtlsSettings = (server.xtls == '1') and {allowInsecure = (server.insecure ~= "0") and true or false,serverName=server.tls_host,} or nil,
+                    security = (server.tls == '1') and ((server.xtls == '1') and 'xtls' or 'tls') or 'none',
+                    tlsSettings = (server.tls == '1' and server.xtls ~= '1') and {allowInsecure = (server.insecure ~= '0') and true or false,serverName=server.tls_host,} or nil,
+                    xtlsSettings = (server.xtls == '1') and {allowInsecure = (server.insecure ~= '0') and true or false,serverName=server.tls_host,} or nil,
                     kcpSettings = (server.transport == 'kcp') and
                         {
                             mtu = tonumber(server.mtu),
@@ -292,4 +297,105 @@ local v2ray = {
     outbounds = outbounds_table,
     routing = {domainStrategy = 'IPIfNonMatch', rules = rules_table}
 }
+
+if global.combine_v2ray_client == '1' and ( global.udp_relay_server == 'same' or global.udp_relay_server == global.global_server ) then
+    local udp_relay = {
+        port = 1234,
+        protocol = 'dokodemo-door',
+        streamSettings = {
+            sockopt = {
+                tproxy = 'tproxy'
+            }
+        },
+        sniffing = {
+            enabled = true,
+            destOverride = {
+                'http',
+                'tls'
+            }
+        },
+        settings = {
+            network = 'udp',
+            followRedirect = true
+        }
+    }
+    table.insert(v2ray.inbounds, udp_relay)
+end
+
+if global.combine_v2ray_client == '1' and proto ~= 'udp' then
+    if socks5_proxy.enable_server == '1' then
+        local sock5 = {
+            tag = 'socks5',
+            sniffing = {
+                enabled = false,
+                destOverride = {
+                    'http',
+                    'tls'
+                }
+            },
+            port = tonumber(socks5_proxy.local_port),
+            protocol = 'socks',
+            settings = {
+                userLevel = 0,
+                udp = true,
+                accounts = {},
+                ip = '0.0.0.0',
+                auth = 'noauth'
+            }
+        }
+        if socks5_proxy.enable_auth == '1' and socks5_proxy.Socks_user ~= '' and socks5_proxy.Socks_pass ~= '' and socks5_proxy.Socks_user ~= nil and socks5_proxy.Socks_pass ~= nil then
+            sock5.settings.auth = 'password'
+            sock5.settings.accounts = {
+                {
+                    user = socks5_proxy.Socks_user,
+                    pass = socks5_proxy.Socks_pass
+                }
+            }
+        end
+        table.insert(v2ray.inbounds,sock5)
+    end
+    if http_proxy.enable_server == '1' then
+        local http = {
+            tag = 'http',
+            port = tonumber(http_proxy.local_port),
+            protocol = 'http',
+            settings = {
+                accounts = {},
+                timeout = 0,
+                userLevel = 0,
+                allowTransparent = false
+            },
+            sniffing = {
+                enabled = false,
+                destOverride = { 'http', 'tls' }
+            }
+        }
+        if http_proxy.enable_auth == '1' and http_proxy.http_user ~= '' and http_proxy.http_pass ~= '' and http_proxy.http_user ~= nil and http_proxy.http_pass ~= nil then
+            sock5.settings.auth = 'password'
+            sock5.settings.accounts = {
+                {
+                    user = http_proxy.http_user,
+                    pass = http_proxy.http_pass
+                }
+            }
+        end
+        table.insert(v2ray.inbounds,http)
+    end
+    if dns_proxy.enable_server == '1' then
+        local dns = {
+            tag = 'dns',
+            protocol = 'dokodemo-door',
+            port = tonumber(dns_proxy.local_port),
+            settings = {
+                address = dns_proxy.server_addr,
+                port = tonumber(dns_proxy.server_port),
+                network = 'udp',
+                timeout = 0,
+                followRedirect = false
+            }
+        }
+        table.insert(v2ray.inbounds,dns)
+    end
+end
+
 print(json.stringify(v2ray, 1))

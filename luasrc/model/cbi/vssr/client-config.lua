@@ -2,7 +2,6 @@
 -- Licensed to the public under the GNU General Public License v3.
 local m, s, o, kcp_enable
 local vssr = 'vssr'
-local uci = luci.model.uci.cursor()
 
 local fs = require 'nixio.fs'
 local sys = require 'luci.sys'
@@ -18,7 +17,6 @@ local function isKcptun(file)
     return (str:lower() == 'kcptun')
 end
 
-local server_table = {}
 local encrypt_methods = {
     'none',
     'table',

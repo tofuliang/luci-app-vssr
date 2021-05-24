@@ -8,39 +8,41 @@ function index()
     end
 
     if nixio.fs.access('/usr/bin/ssr-redir') then
-        entry({'admin', 'services', 'vssr'}, alias('admin', 'services', 'vssr', 'client'), _('Hello World'), 0).dependent = true -- 首页
-        entry({'admin', 'services', 'vssr', 'client'}, cbi('vssr/client'), _('SSR Client'), 10).leaf = true -- 基本设置
-        entry({'admin', 'services', 'vssr', 'servers'}, cbi('vssr/servers'), _('Severs Nodes'), 11).leaf = true -- 服务器节点
-        entry({'admin', 'services', 'vssr', 'servers'}, arcombine(cbi('vssr/servers'), cbi('vssr/client-config')), _('Severs Nodes'), 11).leaf = true -- 编辑节点
-        entry({'admin', 'services', 'vssr', 'subscribe_config'}, cbi('vssr/subscribe-config', {hideapplybtn = true, hidesavebtn = true, hideresetbtn = true}), _('Subscribe'), 12).leaf = true -- 订阅设置
-        entry({'admin', 'services', 'vssr', 'control'}, cbi('vssr/control'), _('Access Control'), 13).leaf = true -- 访问控制
-        entry({'admin', 'services', 'vssr', 'router'}, cbi('vssr/router'), _('Router Config'), 14).leaf = true -- 访问控制
+        entry({ 'admin', 'services', 'vssr' }, alias('admin', 'services', 'vssr', 'client'), _('Hello World'), 0).dependent = true -- 首页
+        entry({ 'admin', 'services', 'vssr', 'client' }, cbi('vssr/client'), _('SSR Client'), 10).leaf = true -- 基本设置
+        entry({ 'admin', 'services', 'vssr', 'servers' }, cbi('vssr/servers'), _('Severs Nodes'), 11).leaf = true -- 服务器节点
+        entry({ 'admin', 'services', 'vssr', 'servers' }, arcombine(cbi('vssr/servers'), cbi('vssr/client-config')), _('Severs Nodes'), 11).leaf = true -- 编辑节点
+        entry({ 'admin', 'services', 'vssr', 'subscribe_config' }, cbi('vssr/subscribe-config', { hideapplybtn = true, hidesavebtn = true, hideresetbtn = true }), _('Subscribe'), 12).leaf = true -- 订阅设置
+        entry({ 'admin', 'services', 'vssr', 'control' }, cbi('vssr/control'), _('Access Control'), 13).leaf = true -- 访问控制
+        entry({ 'admin', 'services', 'vssr', 'router' }, cbi('vssr/router'), _('Router Config'), 14).leaf = true -- 访问控制
         if nixio.fs.access('/usr/bin/xray') then
-            entry({'admin', 'services', 'vssr', 'socks5'}, cbi('vssr/socks5'), _('Local Proxy'), 15).leaf = true -- Socks5代理
+            entry({ 'admin', 'services', 'vssr', 'socks5' }, cbi('vssr/socks5'), _('Socks5'), 15).leaf = true -- Socks5代理
+            entry({ 'admin', 'services', 'vssr', 'http' }, cbi('vssr/http'), _('HTTP'), 13).leaf = true -- http代理
+            entry({ 'admin', 'services', 'vssr', 'dns' }, cbi('vssr/dns'), _('DNS'), 13).leaf = true -- DNS代理
         end
-        entry({'admin', 'services', 'vssr', 'advanced'}, cbi('vssr/advanced'), _('Advanced Settings'), 16).leaf = true -- 高级设置
+        entry({ 'admin', 'services', 'vssr', 'advanced' }, cbi('vssr/advanced'), _('Advanced Settings'), 16).leaf = true -- 高级设置
     elseif nixio.fs.access('/usr/bin/ssr-server') then
-        entry({'admin', 'services', 'vssr'}, alias('admin', 'services', 'vssr', 'server'), _('vssr'), 10).dependent = true
+        entry({ 'admin', 'services', 'vssr' }, alias('admin', 'services', 'vssr', 'server'), _('vssr'), 10).dependent = true
     else
         return
     end
     if nixio.fs.access('/usr/bin/ssr-server') then
-        entry({'admin', 'services', 'vssr', 'server'}, arcombine(cbi('vssr/server'), cbi('vssr/server-config')), _('SSR Server'), 20).leaf = true -- 服务端
+        entry({ 'admin', 'services', 'vssr', 'server' }, arcombine(cbi('vssr/server'), cbi('vssr/server-config')), _('SSR Server'), 20).leaf = true -- 服务端
     end
 
-    entry({'admin', 'services', 'vssr', 'log'}, cbi('vssr/log'), _('Log'), 30).leaf = true -- 日志
-    --entry({'admin', 'services', 'vssr', 'licence'}, template('vssr/licence'), _('Licence'), 40).leaf = true
+    entry({ 'admin', 'services', 'vssr', 'log' }, cbi('vssr/log'), _('Log'), 30).leaf = true -- 日志
+    --entry({ 'admin', 'services', 'vssr', 'licence' }, template('vssr/licence'), _('Licence'), 40).leaf = true
 
-    entry({'admin', 'services', 'vssr', 'refresh'}, call('refresh_data')) -- 更新白名单和GFWLIST
-    entry({'admin', 'services', 'vssr', 'checkport'}, call('check_port')) -- 检测单个端口并返回Ping
-    entry({'admin', 'services', 'vssr', 'run'}, call('act_status')) -- 检测全局服务器状态
-    entry({'admin', 'services', 'vssr', 'change'}, call('change_node')) -- 切换节点
-    entry({'admin', 'services', 'vssr', 'allserver'}, call('get_servers')) -- 获取所有节点Json
-    entry({'admin', 'services', 'vssr', 'subscribe'}, call('get_subscribe')) -- 执行订阅
-    entry({'admin', 'services', 'vssr', 'flag'}, call('get_flag')) -- 获取节点国旗 iso code
-    entry({'admin', 'services', 'vssr', 'ip'}, call('check_ip')) -- 获取ip情况
-    entry({'admin', 'services', 'vssr', 'switch'}, call('switch')) -- 设置节点为自动切换
-    entry({'admin', 'services', 'vssr', 'delnode'}, call('del_node')) -- 删除某个节点
+    entry({ 'admin', 'services', 'vssr', 'refresh' }, call('refresh_data')) -- 更新白名单和GFWLIST
+    entry({ 'admin', 'services', 'vssr', 'checkport' }, call('check_port')) -- 检测单个端口并返回Ping
+    entry({ 'admin', 'services', 'vssr', 'run' }, call('act_status')) -- 检测全局服务器状态
+    entry({ 'admin', 'services', 'vssr', 'change' }, call('change_node')) -- 切换节点
+    entry({ 'admin', 'services', 'vssr', 'allserver' }, call('get_servers')) -- 获取所有节点Json
+    entry({ 'admin', 'services', 'vssr', 'subscribe' }, call('get_subscribe')) -- 执行订阅
+    entry({ 'admin', 'services', 'vssr', 'flag' }, call('get_flag')) -- 获取节点国旗 iso code
+    entry({ 'admin', 'services', 'vssr', 'ip' }, call('check_ip')) -- 获取ip情况
+    entry({ 'admin', 'services', 'vssr', 'switch' }, call('switch')) -- 设置节点为自动切换
+    entry({ 'admin', 'services', 'vssr', 'delnode' }, call('del_node')) -- 删除某个节点
 end
 
 -- 执行订阅
@@ -76,13 +78,13 @@ function get_servers()
     local uci = luci.model.uci.cursor()
     local server_table = {}
     uci:foreach(
-        'vssr',
-        'servers',
-        function(s)
-            local e = {}
-            e['name'] = s['.name']
-            table.insert(server_table, e)
-        end
+            'vssr',
+            'servers',
+            function(s)
+                local e = {}
+                e['name'] = s['.name']
+                table.insert(server_table, e)
+            end
     )
     luci.http.prepare_content('application/json')
     luci.http.write_json(server_table)
@@ -155,10 +157,14 @@ function act_status()
     -- 检测PDNSD状态
     e.pdnsd = luci.sys.call('pidof pdnsd >/dev/null') == 0
     -- 检测游戏模式状态
-    e.game = luci.sys.call('busybox ps -w | grep vssr_u | grep -v grep >/dev/null') == 0
+    e.game = luci.sys.call("netstat -lun|grep 1234 |grep -v grep|grep -v grep >/dev/null") == 0
     -- 检测Socks5
-    e.socks5 = luci.sys.call('busybox ps -w | grep vssr_s | grep -v grep >/dev/null') == 0
-    luci.http.prepare_content('application/json')
+    e.socks5 = luci.sys.call("netstat -ltn|grep `uci get vssr.@socks5_proxy[0].local_port`|grep -v grep >/dev/null") == 0
+    -- 检测Http
+    e.http = luci.sys.call("netstat -ltn|grep `uci get vssr.@http_proxy[0].local_port`|grep -v grep >/dev/null") == 0
+    -- 检测dns
+    e.dns = luci.sys.call("netstat -lun|grep `uci get vssr.@dns_proxy[0].local_port`|grep -v grep >/dev/null") == 0
+    luci.http.prepare_content("application/json")
     luci.http.write_json(e)
 end
 
@@ -175,7 +181,7 @@ function check_port()
     retstring = tostring(ret) == 'true' and '1' or '0'
     local tt = t1 - t0
     luci.http.prepare_content('application/json')
-    luci.http.write_json({ret = retstring, used = math.floor(tt * 1000 + 0.5)})
+    luci.http.write_json({ ret = retstring, used = math.floor(tt * 1000 + 0.5) })
 end
 
 function get_iso(ip)
@@ -234,7 +240,6 @@ function get_flag()
 end
 
 -- 刷新检测文件
-
 function refresh_data()
     local set = luci.http.formvalue('set')
     local icount = 0
@@ -310,5 +315,5 @@ function refresh_data()
         end
     end
     luci.http.prepare_content('application/json')
-    luci.http.write_json({ret = retstring, retcount = icount})
+    luci.http.write_json({ ret = retstring, retcount = icount })
 end

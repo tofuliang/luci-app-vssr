@@ -1,0 +1,7 @@
+#!/bin/sh
+
+[ "$ACTION" = "ifup" ] && {
+  /usr/bin/lua /usr/share/vssr/update.lua
+  /usr/share/vssr/gfw2ipset.sh
+  [ "`uci get smartdns.@smartdns[0].enabled`" = "1" ] && /etc/init.d/smartdns restart >/dev/null 2>&1
+}

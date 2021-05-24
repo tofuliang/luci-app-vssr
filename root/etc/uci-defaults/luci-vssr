@@ -14,5 +14,6 @@ uci -q batch <<-EOF >/dev/null
 EOF
 
 /usr/share/vssr/gfw2ipset.sh
+[ "`uci get smartdns.@smartdns[0].enabled`" = "1" ] && /etc/init.d/smartdns restart >/dev/null 2>&1
 rm -f /tmp/luci-indexcache
 exit 0

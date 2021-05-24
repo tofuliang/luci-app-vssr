@@ -1,0 +1,15 @@
+<svg width="150" height="150" xmlns="http://www.w3.org/2000/svg">
+ <style type="text/css">.st0{fill:#15ADAD;}
+	.st1{fill:#FFFFFF;}</style>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <circle id="svg_2" r="75" cy="75" cx="74" class="st0"/>
+  <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_10" y="77.453125" x="108.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="null" fill="#000000"/>
+  <text stroke="null" transform="matrix(1.8935931416367566,0,0,1.6909091472625732,-44.149765715059175,-37.62216215953231) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_13" y="74.81838" x="37.590181" stroke-width="0" fill="#ffffff">DNS</text>
+ </g>
+</svg>

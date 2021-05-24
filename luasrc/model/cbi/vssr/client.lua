@@ -1,12 +1,12 @@
 -- Copyright (C) 2017 yushi studio <ywb94@qq.com> github.com/ywb94
 -- Copyright (C) 2018 lean <coolsnowwolf@gmail.com> github.com/coolsnowwolf
 -- Licensed to the public under the GNU General Public License v3.
-local m, s, sec, o, kcp_enable
+local m, s, o
 local vssr = 'vssr'
 local gfwmode = 0
 
 
-if nixio.fs.access('/etc/vssr/gfw_list.conf') then 
+if nixio.fs.access('/etc/vssr/gfw_list.conf') then
     gfwmode = 1
 end
 
@@ -15,11 +15,6 @@ local uci = luci.model.uci.cursor()
 m = Map(vssr)
 
 m:section(SimpleSection).template = 'vssr/status_top'
-
-local server_table = {}
-local tw_table = {}
-local tvb_table = {}
-
 
 local server_table = {}
 uci:foreach(
@@ -83,6 +78,17 @@ end
 o = s:option(Flag, 'v2ray_flow', translate('Open v2ray route'))
 o.rmempty = false
 o.description = translate('When open v2ray routed,Apply may take more time.')
+
+o = s:option(Flag, "combine_v2ray_client", translate("Combine V2ray Client"))
+o.rmempty = false
+
+o = s:option(Flag, "bypass_cn", translate("Bypass China IP"))
+o.rmempty = false
+o.description = translate('Bypass IPs In ipset cn and china when enabled.')
+
+o = s:option(Flag, "flush_ipset", translate("Flush IPSET"))
+o.rmempty = false
+o.description = translate('Flush IPSET on VSSR restart.')
 
 for i, v in pairs(route_name) do
     o = s:option(ListValue, v, translate(route_label[i]))

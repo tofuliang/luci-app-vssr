@@ -145,6 +145,12 @@ msgstr "服务端配置"
 msgid "KcpTun Enable"
 msgstr "KcpTun 启用"
 
+msgid "Check Try Count"
+msgstr "重试次数"
+
+msgid "Enable Auto Restart"
+msgstr "自动重启(开启后节点自动切换失效)"
+
 msgid "bin:/usr/bin/kcptun-client"
 msgstr "二进制文件：/usr/bin/kcptun-client"
 
@@ -177,6 +183,9 @@ msgstr "Xray SOCKS5 代理"
 
 msgid "Xray HTTP Proxy"
 msgstr "Xray HTTP 代理"
+
+msgid "V2ray HTTP Proxy"
+msgstr "V2ray HTTP代理"
 
 msgid "Server"
 msgstr "服务器"
@@ -422,13 +431,13 @@ msgstr "保存并开始订阅"
 msgid "Server Count"
 msgstr "节点数量"
 
-msgid "IP black-and-white list"
+msgid "IP black-and-white_domain.list"
 msgstr "禁止/通行名单"
 
 msgid "WAN IP AC"
 msgstr "广域网访问控制"
 
-msgid "WAN White List IP"
+msgid "WAN white_domain.list IP"
 msgstr "不走代理的广域网 IP"
 
 msgid "WAN Force Proxy IP"
@@ -528,7 +537,7 @@ msgid "Only Common Ports"
 msgstr "仅常用端口（不走P2P流量到代理）"
 
 msgid "Ping Latency"
-msgstr "Ping延迟"				   
+msgstr "Ping延迟"
 
 msgid "Bypass Domain List"
 msgstr "直连域名"
@@ -542,14 +551,26 @@ msgstr "用户名"
 msgid "Socks pass"
 msgstr "密码"
 
-msgid "HTTP user"
+msgid "HTTP User"
 msgstr "用户名"
 
-msgid "HTTP pass"
+msgid "HTTP Pass"
 msgstr "密码"
+
+msgid "V2ray DNS Proxy"
+msgstr "DNS代理"
+
+msgid "DNS Server"
+msgstr "DNS 地址"
+
+msgid "DNS Port"
+msgstr "DNS 端口"
 
 msgid "Enable Servers"
 msgstr "开启服务"
+
+msgid "Enable Proxy"
+msgstr "开启代理"
 
 msgid "Enable Auth"
 msgstr "开启验证"
@@ -614,7 +635,6 @@ msgstr "导入配置信息"
 msgid "Import"
 msgstr "导入"
 
-
 msgid "Configuration Succeeded"
 msgstr "配置信息成功"
 
@@ -626,6 +646,12 @@ msgstr "配置链接"
 
 msgid "Open v2ray route"
 msgstr "开启分流"
+
+msgid "Combine V2ray Client"
+msgstr "尽量合并V2ray本地代理进程"
+
+msgid "Open v2ray split-flow"
+msgstr "开启V2ray分流"
 
 msgid "When open v2ray routed,Apply may take more time."
 msgstr "(支持全类型分流)当分流开启时，保存并应用的时间可能变长。"
@@ -654,8 +680,29 @@ msgstr "自定义代理"
 msgid "Custom Proxy Domain Name"
 msgstr "自定义分流域名"
 
+msgid "Force Proxy Domain Name"
+msgstr "强制代理域名"
+
 msgid "Proxy Domain Name"
 msgstr "需要被分流的域名"
+
+msgid "Black AS"
+msgstr "代理AS网段"
+
+msgid "Bypass AS"
+msgstr "直连AS网段"
+
+msgid "Bypass China IP"
+msgstr "直连中国IP"
+
+msgid "Bypass IPs In ipset cn and china when enabled."
+msgstr "启用时，符合IPSET cn 或 china 的IP会直连。"
+
+msgid "Flush IPSET"
+msgstr "清空IPSET"
+
+msgid "Flush IPSET on VSSR restart."
+msgstr "服务重启时，会清除IPSET(fplan gmlan oversea whitelist blacklist force_list)的值。"
 
 msgid "adblock settings"
 msgstr "广告屏蔽设置"

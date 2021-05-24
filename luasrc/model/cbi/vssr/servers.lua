@@ -1,5 +1,5 @@
 -- Licensed to the public under the GNU General Public License v3.
-local m, s, o
+local m, s
 local vssr = 'vssr'
 local json = require 'luci.jsonc'
 

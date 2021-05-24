@@ -1,6 +1,5 @@
 local vssr = 'vssr'
 local uci = luci.model.uci.cursor()
-local server_table = {}
 
 local gfwmode = 0
 local gfw_count = 0
@@ -44,6 +43,9 @@ o = s:option(Flag, 'monitor_enable', translate('Enable Process Deamon'))
 o.rmempty = false
 
 o = s:option(Flag, 'enable_switch', translate('Enable Auto Switch'))
+o.rmempty = false
+
+o = s:option(Flag, "enable_restart", translate("Enable Auto Restart"))
 o.rmempty = false
 
 o = s:option(Value, 'switch_time', translate('Switch check cycly(second)'))

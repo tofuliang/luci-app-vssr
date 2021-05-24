@@ -365,6 +365,65 @@ footer.mobile-hide {
     width: 100% !important;
 }
 
+@media screen and (max-width: 2000px) {
+    .pure-u-1-5 {
+        width: 25%;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    .pure-u-1-5 {
+        width: 33.33333333%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .pure-u-1-5 {
+        width: 50%;
+    }
+
+    .status .pure-u-1-5 {
+        width: 33.333%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .pure-u-1-4 {
+        width: 50%;
+    }
+
+    .pure-u-1-6 {
+        width: 50%;
+    }
+
+    .pure-u-1-2 {
+        width: 100%;
+    }
+
+    .pure-u-1-5 {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .status .pure-u-1-5 {
+        width: 50%;
+    }
+
+    .cbi-button-add {
+        position: fixed;
+        padding: 0.3rem 0.5rem;
+        z-index: 1000;
+        width: 50px !important;
+        height: 50px;
+        bottom: 90px;
+        right: 5px;
+        font-size: 16px;
+        border-radius: 50%;
+        display: block;
+        background-color: #fb6340 !important;
+        border-color: #fb6340 !important;
+        box-shadow: 0 0 1rem 0 rgba(136, 152, 170, .75);
+    }
 
 /**  Subscribe panel  **/
 
@@ -573,5 +632,4 @@ footer.mobile-hide {
     .ssr-button {
         color: #ccc;
     }
-
 }

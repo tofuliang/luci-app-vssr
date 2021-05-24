@@ -7,10 +7,6 @@ Description: In User Settings Edit
 FilePath: \luci-app-vssr\luasrc\model\cbi\vssr\socks5.lua
 --]]
 local vssr = 'vssr'
-local uci = luci.model.uci.cursor()
-local server_table = {}
-
-local sys = require 'luci.sys'
 
 m = Map(vssr)
 
@@ -26,12 +22,12 @@ if nixio.fs.access('/usr/bin/xray') then
     o.rmempty = false
 
     o = s:option(Value, 'Socks_user', translate('Socks user'))
-    o.default = 'user'
+    o.default = ''
     o.rmempty = true
     o:depends('enable_auth', '1')
 
     o = s:option(Value, 'Socks_pass', translate('Socks pass'))
-    o.default = 'password'
+    o.default = ''
     o.password = true
     o.rmempty = true
     o:depends('enable_auth', '1')

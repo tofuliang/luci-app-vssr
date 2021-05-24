@@ -1,7 +1,7 @@
 local m, s, o
 local NXFS = require 'nixio.fs'
 
-m = Map('vssr', translate('IP black-and-white list'))
+m = Map('vssr', translate('IP black-and-white_domain.list'))
 
 s = m:section(TypedSection, 'access_control')
 s.anonymous = true
@@ -9,7 +9,7 @@ s.anonymous = true
 -- Part of WAN
 s:tab('wan_ac', translate('WAN IP AC'))
 
-o = s:taboption('wan_ac', DynamicList, 'wan_bp_ips', translate('WAN White List IP'))
+o = s:taboption('wan_ac', DynamicList, 'wan_bp_ips', translate('WAN white_domain.list IP'))
 o.datatype = 'ip4addr'
 
 o = s:taboption('wan_ac', DynamicList, 'wan_fw_ips', translate('WAN Force Proxy IP'))
@@ -66,7 +66,7 @@ luci.ip.neighbors(
 
 s:tab('esc', translate('Bypass Domain List'))
 
-local escconf = '/etc/vssr/white.list'
+local escconf = '/etc/vssr/white_domain.list'
 o = s:taboption('esc', TextValue, 'escconf')
 o.rows = 13
 o.wrap = 'off'
@@ -83,7 +83,7 @@ end
 
 s:tab('block', translate('Black Domain List'))
 
-local blockconf = '/etc/vssr/black.list'
+local blockconf = '/etc/vssr/block_domain.list'
 o = s:taboption('block', TextValue, 'blockconf')
 o.rows = 13
 o.wrap = 'off'
@@ -97,5 +97,74 @@ end
 o.remove = function(self, section, value)
     NXFS.writefile(blockconf, '')
 end
+
+s:tab('proxy', translate('Custom Proxy Domain Name'))
+local cusconf = "/etc/vssr/custom_domain.list"
+o = s:taboption("proxy", TextValue, "cusconf")
+
+o.rows = 13
+o.wrap = "off"
+o.rmempty = true
+o.cfgvalue = function(self, section)
+    return NXFS.readfile(cusconf) or " "
+end
+o.write = function(self, section, value)
+    NXFS.writefile(cusconf, value:gsub("\r\n", "\n"))
+end
+o.remove = function(self, section, value)
+    NXFS.writefile(cusconf, "")
+end
+
+s:tab("force", translate("Force Proxy Domain Name"))
+local forceconf = "/etc/vssr/force_domain.list"
+o = s:taboption("force", TextValue, "forceconf")
+
+o.rows = 13
+o.wrap = "off"
+o.rmempty = true
+o.cfgvalue = function(self, section)
+    return NXFS.readfile(forceconf) or " "
+end
+o.write = function(self, section, value)
+    NXFS.writefile(forceconf, value:gsub("\r\n", "\n"))
+end
+o.remove = function(self, section, value)
+    NXFS.writefile(forceconf, "")
+end
+
+s:tab("black_as", translate("Black AS"))
+local black_asconf = "/etc/vssr/block_as.list"
+o = s:taboption("black_as", TextValue, "black_asconf")
+
+o.rows = 13
+o.wrap = "off"
+o.rmempty = true
+o.cfgvalue = function(self, section)
+    return NXFS.readfile(black_asconf) or " "
+end
+o.write = function(self, section, value)
+    NXFS.writefile(black_asconf, value:gsub("\r\n", "\n"))
+end
+o.remove = function(self, section, value)
+    NXFS.writefile(black_asconf, "")
+end
+
+s:tab('esc_as', translate('Bypass AS'))
+
+local esc_asconf = '/etc/vssr/esc_as.list'
+o = s:taboption('esc_as', TextValue, 'esc_asconf')
+o.rows = 13
+o.wrap = 'off'
+o.rmempty = true
+o.cfgvalue = function(self, section)
+    return NXFS.readfile(esc_asconf) or ''
+end
+o.write = function(self, section, value)
+    NXFS.writefile(esc_asconf, value:gsub('\r\n', '\n'))
+end
+o.remove = function(self, section, value)
+    NXFS.writefile(esc_asconf, '')
+end
+
 
 return m

@@ -98,23 +98,6 @@ o.remove = function(self, section, value)
     NXFS.writefile(blockconf, '')
 end
 
-s:tab('proxy', translate('Custom Proxy Domain Name'))
-local cusconf = "/etc/vssr/custom_domain.list"
-o = s:taboption("proxy", TextValue, "cusconf")
-
-o.rows = 13
-o.wrap = "off"
-o.rmempty = true
-o.cfgvalue = function(self, section)
-    return NXFS.readfile(cusconf) or " "
-end
-o.write = function(self, section, value)
-    NXFS.writefile(cusconf, value:gsub("\r\n", "\n"))
-end
-o.remove = function(self, section, value)
-    NXFS.writefile(cusconf, "")
-end
-
 s:tab("force", translate("Force Proxy Domain Name"))
 local forceconf = "/etc/vssr/force_domain.list"
 o = s:taboption("force", TextValue, "forceconf")

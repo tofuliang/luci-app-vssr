@@ -44,7 +44,9 @@ local route_name = {
     'disney_server',
     'prime_server',
     'tvb_server',
-    'custom_server'
+    'custom_server',
+    'custom2_server',
+    'custom3_server'
 }
 local route_label = {
     'Youtube Proxy',
@@ -53,6 +55,8 @@ local route_label = {
     'Disney+ Proxy',
     'Prime Video Proxy',
     'TVB Video Proxy',
+    'Custom Proxy',
+    'Custom Proxy',
     'Custom Proxy'
 }
 
@@ -90,8 +94,14 @@ o = s:option(Flag, "flush_ipset", translate("Flush IPSET"))
 o.rmempty = false
 o.description = translate('Flush IPSET on VSSR restart.')
 
+local cusN=1
 for i, v in pairs(route_name) do
-    o = s:option(ListValue, v, translate(route_label[i]))
+    if string.sub(v,1,string.len("custom"))=="custom" then
+        o = s:option(ListValue, v, translate(route_label[i])..cusN)
+        cusN = cusN+1
+    else
+        o = s:option(ListValue, v, translate(route_label[i]))
+    end
     o:value('nil', translate('Same as Main Server'))
     for _, key in pairs(server_table) do
         o:value(key.name, key.gname)

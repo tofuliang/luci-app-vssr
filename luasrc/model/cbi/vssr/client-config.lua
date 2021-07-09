@@ -136,6 +136,7 @@ end
 if nixio.fs.access('/usr/sbin/trojan') then
     o:value('trojan', translate('Trojan'))
 end
+o:value('socks5', translate('Socks5'))
 
 o.description = translate('Using incorrect encryption mothod may causes service fail to start')
 

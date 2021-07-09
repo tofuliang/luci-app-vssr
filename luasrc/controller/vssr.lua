@@ -16,9 +16,7 @@ function index()
         entry({ 'admin', 'services', 'vssr', 'control' }, cbi('vssr/control'), _('Access Control'), 13).leaf = true -- 访问控制
         entry({ 'admin', 'services', 'vssr', 'router' }, cbi('vssr/router'), _('Router Config'), 14).leaf = true -- 访问控制
         if nixio.fs.access('/usr/bin/xray') then
-            entry({ 'admin', 'services', 'vssr', 'socks5' }, cbi('vssr/socks5'), _('Socks5'), 15).leaf = true -- Socks5代理
-            entry({ 'admin', 'services', 'vssr', 'http' }, cbi('vssr/http'), _('HTTP'), 13).leaf = true -- http代理
-            entry({ 'admin', 'services', 'vssr', 'dns' }, cbi('vssr/dns'), _('DNS'), 13).leaf = true -- DNS代理
+            entry({ 'admin', 'services', 'vssr', 'lan_proxy' }, cbi('vssr/lan-proxy'), _('Lan Proxy'), 13).leaf = true -- Socks5代理
         end
         entry({ 'admin', 'services', 'vssr', 'advanced' }, cbi('vssr/advanced'), _('Advanced Settings'), 16).leaf = true -- 高级设置
     elseif nixio.fs.access('/usr/bin/ssr-server') then

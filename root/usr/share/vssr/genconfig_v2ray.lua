@@ -28,6 +28,12 @@ local v2ray_flow = ucursor:get_first(name, 'global', 'v2ray_flow', '0')
 local custom_domain = read_conf("/etc/vssr/custom_domain.list")
 local custom_ip = read_conf("/etc/vssr/custom_ip.list")
 
+local custom_domain2 = read_conf("/etc/vssr/custom2_domain.list")
+local custom_ip2 = read_conf("/etc/vssr/custom2_ip.list")
+
+local custom_domain3 = read_conf("/etc/vssr/custom3_domain.list")
+local custom_ip3 = read_conf("/etc/vssr/custom3_ip.list")
+
 local youtube_domain = read_conf("/etc/vssr/youtube_domain.list")
 local youtube_ip = read_conf("/etc/vssr/youtube_ip.list")
 
@@ -117,6 +123,26 @@ local flow_table = {
             ip = custom_ip,
             outboundTag = 'custom'
         }
+    },
+    custom2 = {
+        name = 'custom2',
+        port = 2088,
+        rules = {
+            type = 'field',
+            domain = custom_domain2,
+            ip = custom_ip2,
+            outboundTag = 'custom2'
+        }
+    },
+    custom3 = {
+        name = 'custom3',
+        port = 2089,
+        rules = {
+            type = 'field',
+            domain = custom_domain3,
+            ip = custom_ip3,
+            outboundTag = 'custom3'
+        }
     }
 }
 
@@ -155,7 +181,17 @@ function gen_outbound(server_node, tags, local_ports)
         local server = ucursor:get_all(name, server_node)
         local node_type = server.type == 'vless' and 'vless' or 'vmess'
 
-        if server.type ~= 'v2ray' and server.type ~= 'vless' then
+        if server.type == 'socks5' then
+            bound = {
+                tag = tags,
+                protocol = 'socks',
+                settings = {
+                    servers = {
+                        {address = server.server, port = tonumber(server.server_port)}
+                    }
+                }
+            }
+        elseif server.type ~= 'v2ray' and server.type ~= 'vless' then
             bound = {
                 tag = tags,
                 protocol = 'socks',
@@ -270,6 +306,28 @@ if v2ray_flow == '1' then
 else
     table.insert(outbounds_table, gen_outbound(server_section, 'main', local_port))
 end
+
+if socks5_proxy.enable_server == '1' then
+    if socks5_proxy.proxy_server ~= nil and socks5_proxy.proxy_server ~= 'nil' then
+        table.insert(outbounds_table, gen_outbound(socks5_proxy.proxy_server, 'socks5', 2090))
+    end
+    table.insert(rules_table, (socks5_proxy.proxy_server ~= nil and socks5_proxy.proxy_server ~= 'nil') and {type = 'field',inboundTag = {'socks5'},outboundTag = 'socks5'} or nil)
+end
+
+if http_proxy.enable_server == '1' then
+    if http_proxy.proxy_server ~= nil and http_proxy.proxy_server ~= 'nil' then
+        table.insert(outbounds_table, gen_outbound(http_proxy.proxy_server, 'http', 2091))
+    end
+    table.insert(rules_table, (http_proxy.proxy_server ~= nil and http_proxy.proxy_server ~= 'nil') and {type = 'field',inboundTag = {'http'},outboundTag = 'http'} or nil)
+end
+
+if dns_proxy.enable_server == '1' then
+    if dns_proxy.proxy_server ~= nil and dns_proxy.proxy_server ~= 'nil' then
+        table.insert(outbounds_table, gen_outbound(dns_proxy.proxy_server, 'dns', 2092))
+    end
+    table.insert(rules_table, (dns_proxy.proxy_server ~= nil and dns_proxy.proxy_server ~= 'nil') and {type = 'field',inboundTag = {'dns'},outboundTag = 'dns'} or nil)
+end
+
 
 table.insert(outbounds_table, gen_bt_outbounds())
 table.insert(rules_table, bt_rules)
@@ -386,10 +444,11 @@ if global.combine_v2ray_client == '1' and proto ~= 'udp' then
             tag = 'dns',
             protocol = 'dokodemo-door',
             port = tonumber(dns_proxy.local_port),
+            listen = "0.0.0.0",
             settings = {
                 address = dns_proxy.server_addr,
                 port = tonumber(dns_proxy.server_port),
-                network = 'udp',
+                network = 'tcp,udp',
                 timeout = 0,
                 followRedirect = false
             }

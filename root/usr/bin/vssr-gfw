@@ -30,5 +30,5 @@ rm -f /tmp/gfwlist.txt
 sed '/.*/s/.*/server=\/\.&\/127.0.0.1#5335\nipset=\/\.&\/gfwlist/' /tmp/gfw.txt >/tmp/gfwnew.txt
 sed '/.*/s/.*/domain-rules \/&\/ -address #6 -nameserver gfwlist -ipset gfwlist/' /tmp/gfw.txt >/tmp/smartdns/gfwlist.conf
 
-mv /tmp/gfw.txt /etc/config/gfw.list
+mv /tmp/gfw.txt /etc/vssr/gfw.list
 

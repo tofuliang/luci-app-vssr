@@ -178,14 +178,17 @@ msgstr "编辑服务器配置"
 msgid "Alias"
 msgstr "别名"
 
-msgid "Xray SOCKS5 Proxy"
-msgstr "Xray SOCKS5 代理"
+msgid "Xray Socks5 Proxy"
+msgstr "Xray Socks5 代理"
 
 msgid "Xray HTTP Proxy"
 msgstr "Xray HTTP 代理"
 
-msgid "V2ray HTTP Proxy"
-msgstr "V2ray HTTP代理"
+msgid "Xray DNS Proxy"
+msgstr "Xray DNS 代理"
+
+msgid "Lan Proxy"
+msgstr "局域网代理"
 
 msgid "Server"
 msgstr "服务器"
@@ -403,6 +406,9 @@ msgstr "基本设置 [SS|SSR|Xray|Trojan]"
 
 msgid "Main Server"
 msgstr "主服务器"
+
+msgid "Proxy Server"
+msgstr "代理服务器"
 
 msgid "Anti-pollution DNS Server"
 msgstr "访问国外域名DNS服务器"
@@ -676,9 +682,6 @@ msgstr "TVB 视频代理"
 
 msgid "Custom Proxy"
 msgstr "自定义代理"
-
-msgid "Custom Proxy Domain Name"
-msgstr "自定义分流域名"
 
 msgid "Force Proxy Domain Name"
 msgstr "强制代理域名"

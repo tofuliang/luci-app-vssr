@@ -61,7 +61,7 @@ find_bin() {
     ssr) ret="ssr-redir" ;;
     ssr-local) ret="ssr-local" ;;
     ssr-server) ret="ssr-server" ;;
-    v2ray | vless) ret="xray" ;;
+    v2ray | vless | socks5) ret="xray" ;;
     trojan) ret="trojan" ;;
     esac
     echo $(find /usr -perm /+x -type f -name $ret)
@@ -123,6 +123,7 @@ gen_config_file() {
     local stype=$(uci_get_by_name $1 type)
     local port=$(uci_get_by_name $1 local_port)
     [[ "$stype" == "vless" ]] && stype="v2ray"
+    [[ "$stype" == "socks5" ]] && stype="v2ray"
 
     if [ "$stype" == "trojan" ]; then
         if [ "$re_type" == "udp" ]; then
@@ -297,6 +298,11 @@ start_shunt() {
     eval shunt_type6="prime"
     eval shunt_type7="tvb"
     eval shunt_type8="custom"
+    eval shunt_type9="custom2"
+    eval shunt_type10="custom3"
+    eval shunt_type11="socks5_proxy"
+    eval shunt_type12="http_proxy"
+    eval shunt_type13="dns_proxy"
     eval shunt_port1=2080
     eval shunt_port2=2081
     eval shunt_port3=2082
@@ -305,14 +311,23 @@ start_shunt() {
     eval shunt_port6=2085
     eval shunt_port7=2086
     eval shunt_port8=2087
-    for i in 1 2 3 4 5 6 7 8; do
+    eval shunt_port9=2088
+    eval shunt_port10=2089
+    eval shunt_port11=2090
+    eval shunt_port12=2091
+    eval shunt_port13=2092
+    for i in $(seq 1 13); do
         shunt_type=$(eval echo "\$shunt_type$i")
         shunt_port=$(eval echo "\$shunt_port$i")
-        local server_index=$(uci_get_by_type global ${shunt_type}_server)
+        if [ "${shunt_type##*_}" != "proxy" ];then
+            local server_index=$(uci_get_by_type global ${shunt_type}_server)
+        else
+            local server_index=$(uci_get_by_type ${shunt_type} proxy_server)
+        fi
         local server_port=${shunt_port}
         local server_type=$(uci_get_by_name $server_index type)
         local server_ip=$(uci_get_by_name $server_index server)
-        if [ "$server_type" = "vless" ]; then
+        if [ "$server_type" = "vless" ] || [ "$server_type" = "socks5" ]; then
             server_type="v2ray"
         fi
         [ "$server_type" = "trojan" ] && re_type="client" || re_type="tcp"
@@ -385,7 +400,7 @@ start_redir() {
             done
             echo "$(date "+%Y-%m-%d %H:%M:%S") $name $threads 线程 已启动!" >>/tmp/vssr.log
             ;;
-        v2ray | vless)
+        v2ray | vless | socks5)
             $sscmd -config $last_config_file >/dev/null 2>&1 &
             echo "$(date "+%Y-%m-%d %H:%M:%S") $($sscmd -version | head -1) 已启动!" >>/tmp/vssr.log
             ;;

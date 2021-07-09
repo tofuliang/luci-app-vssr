@@ -21,8 +21,8 @@ config socks5_proxy
 	option local_port '1080'
 	option local_address '0.0.0.0'
 	option enable_auth '1'
-	option Socks_user 'user'
-	option Socks_pass 'password'
+	option socks_user ''
+	option socks_pass ''
 
 config dns_proxy
 	option enable_server '0'
